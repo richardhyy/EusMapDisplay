@@ -95,7 +95,8 @@ public class PlayerListener implements Listener {
         }
 
         MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
-        mapDisplay.triggerEvent(DisplayEventType.WHEEL_SCROLL,e.getPlayer(), e.getNewSlot() - e.getPreviousSlot(), null);
+        int delta = e.getNewSlot() - e.getPreviousSlot();
+        mapDisplay.triggerEvent(DisplayEventType.WHEEL_SCROLL,e.getPlayer(), Math.abs(delta) >= 8 ? (Math.abs(delta)-7) * (delta > 0 ? 1 : -1) : delta, null);
     }
 
     UUID getTargetMapDisplay(Entity entity, AtomicReference<Integer> refWindowX, AtomicReference<Integer> refWindowY) {
