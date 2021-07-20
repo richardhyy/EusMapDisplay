@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -79,6 +80,22 @@ public class PlayerListener implements Listener {
             default ->
                     mapDisplay.triggerEvent(DisplayEventType.RIGHT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
         }
+    }
+
+    @EventHandler
+    public void onPlayerScrollWheel(PlayerItemHeldEvent e) {
+        Entity entity = e.getPlayer().getTargetEntity(10, false);
+
+        AtomicReference<Integer> windowX = new AtomicReference<>();
+        AtomicReference<Integer> windowY = new AtomicReference<>();
+
+        UUID uuid = getTargetMapDisplay(entity, windowX, windowY);
+        if (uuid == null) {
+            return;
+        }
+
+        MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
+        mapDisplay.triggerEvent(DisplayEventType.WHEEL_SCROLL,e.getPlayer(), e.getNewSlot() - e.getPreviousSlot(), null);
     }
 
     UUID getTargetMapDisplay(Entity entity, AtomicReference<Integer> refWindowX, AtomicReference<Integer> refWindowY) {
