@@ -60,11 +60,15 @@ public class MapDisplay {
             displayEventHandlerList = new ArrayList<>();
         }
         for (DisplayEventHandler handler : displayEventHandlerList.toArray(new DisplayEventHandler[0])) {
-            switch (type) {
-                case CURSOR_MOVE -> handler.onCursorPositionChanged(this, player, value1, value2);
-                case LEFT_CLICK -> handler.onLeftClick(this, player, value1, value2);
-                case RIGHT_CLICK -> handler.onRightClick(this, player, value1, value2);
-                case WHEEL_SCROLL -> handler.onWheelScroll(this, player, value1);
+            try {
+                switch (type) {
+                    case CURSOR_MOVE -> handler.onCursorPositionChanged(this, player, value1, value2);
+                    case LEFT_CLICK -> handler.onLeftClick(this, player, value1, value2);
+                    case RIGHT_CLICK -> handler.onRightClick(this, player, value1, value2);
+                    case WHEEL_SCROLL -> handler.onWheelScroll(this, player, value1);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }
