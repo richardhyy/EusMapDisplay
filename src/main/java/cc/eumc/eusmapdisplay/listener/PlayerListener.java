@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +54,31 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
+        if (!(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK ||
+              e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
 
+        Entity entity = e.getPlayer().getTargetEntity(10, false);
+
+        AtomicReference<Integer> windowX = new AtomicReference<>();
+        AtomicReference<Integer> windowY = new AtomicReference<>();
+
+        UUID uuid = getTargetMapDisplay(entity, windowX, windowY);
+        if (uuid == null) {
+            return;
+        }
+
+        int[] absoluteCoordinates = getTargetAbsoluteCoordinates(windowX.get(), windowY.get(), entity, e.getPlayer().getLocation());
+
+        MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
+
+        switch (e.getAction()) {
+            case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK ->
+                    mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
+            default ->
+                    mapDisplay.triggerEvent(DisplayEventType.RIGHT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
+        }
     }
 
     UUID getTargetMapDisplay(Entity entity, AtomicReference<Integer> refWindowX, AtomicReference<Integer> refWindowY) {
