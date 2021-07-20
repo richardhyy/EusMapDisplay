@@ -1,22 +1,19 @@
 package cc.eumc.eusmapdisplay.command;
 
 import cc.eumc.eusmapdisplay.EusMapDisplay;
-import cc.eumc.eusmapdisplay.model.Display;
+import cc.eumc.eusmapdisplay.event.DisplayEventHandler;
 import cc.eumc.eusmapdisplay.model.MapDisplay;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapPalette;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AdminCommand implements CommandExecutor, TabExecutor {
@@ -37,6 +34,35 @@ public class AdminCommand implements CommandExecutor, TabExecutor {
                 for(ItemStack item : plugin.getMapManager().getMapItem(mapDisplay)) {
                     player.getInventory().addItem(item);
                 }
+                mapDisplay.registerEventHandler(new DisplayEventHandler() {
+                    int x0 = -1;
+                    int y0 = -1;
+
+                    @Override
+                    public void onCursorPositionChanged(MapDisplay mapDisplay, Player player, int x, int y) {
+
+                    }
+
+                    @Override
+                    public void onLeftClick(MapDisplay mapDisplay, Player player, int x, int y) {
+
+                    }
+
+                    @Override
+                    public void onRightClick(MapDisplay mapDisplay, Player player, int x, int y) {
+                        if (x0 > -1 && y0 > -1) {
+                            mapDisplay.getDisplay().plotRectangle(x0, y0, x, y, MapPalette.DARK_GREEN, MapPalette.LIGHT_GREEN);
+                            mapDisplay.getDisplay().plotLine(x0, y0, x, y, MapPalette.BLUE);
+                        }
+                        x0 = x;
+                        y0 = y;
+                    }
+
+                    @Override
+                    public void onWheelScroll(MapDisplay mapDisplay, Player player, int wheelAmt) {
+
+                    }
+                });
             }
         }
         else {

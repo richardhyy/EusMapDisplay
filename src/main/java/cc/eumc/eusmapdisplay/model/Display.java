@@ -88,6 +88,63 @@ public class Display {
         this.pixels[x][y] = value;
     }
 
+    public void plotLine(int x0, int y0, int x1, int y1, byte color) {
+        int t;
+        if (x1 < x0) {
+            t = x1;
+            x1 = x0;
+            x0 = t;
+        }
+        if (y1 < y0) {
+            t = y1;
+            y1 = y0;
+            y0 = t;
+        }
+
+        int dx = x1 - x0;
+        int dy = y1 - y0;
+        int D = 2*dy - dx;
+        int y = y0;
+
+        for (int x = x0; x <= x1; x++) {
+            setPixel(x, y, color);
+            if (D > 0) {
+                y = y + 1;
+                D = D - 2 * dx;
+            }
+            D = D + 2 * dy;
+        }
+    }
+
+    public void plotRectangle(int x0, int y0, int x1, int y1, byte fillColor, byte outlineColor) {
+        int t;
+        if (x1 < x0) {
+            t = x1;
+            x1 = x0;
+            x0 = t;
+        }
+        if (y1 < y0) {
+            t = y1;
+            y1 = y0;
+            y0 = t;
+        }
+
+        if (outlineColor != 0) {
+            plotLine(x0, y0, x1, y0, outlineColor);
+            plotLine(x0, y1, x1, y1, outlineColor);
+            plotLine(x0, y0, x0, y1, outlineColor);
+            plotLine(x1, y0, x1, y1, outlineColor);
+        }
+
+        if (fillColor != 0) {
+            for (int x = x0 + 1; x < x1 - 1; x++) {
+                for (int y = y0 + 1; y < y1 - 1; y++) {
+                    setPixel(x, y, fillColor);
+                }
+            }
+        }
+    }
+
     /**
      * Get global coordinates in display from coordinates in sub-window.
      * @param windowX
