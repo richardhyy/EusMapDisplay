@@ -89,30 +89,26 @@ public class Display {
     }
 
     public void plotLine(int x0, int y0, int x1, int y1, byte color) {
-        int t;
-        if (x1 < x0) {
-            t = x1;
-            x1 = x0;
-            x0 = t;
-        }
-        if (y1 < y0) {
-            t = y1;
-            y1 = y0;
-            y0 = t;
-        }
-
-        int dx = x1 - x0;
-        int dy = y1 - y0;
-        int D = 2*dy - dx;
-        int y = y0;
-
-        for (int x = x0; x <= x1; x++) {
-            setPixel(x, y, color);
-            if (D > 0) {
-                y = y + 1;
-                D = D - 2 * dx;
+        int dx = Math.abs(x1-x0);
+        int sx = x0<x1 ? 1 : -1;
+        int dy = -Math.abs(y1-y0);
+        int sy = y0<y1 ? 1 : -1;
+        int err = dx+dy;  /* error value e_xy */
+        while (true) {  /* loop */
+            setPixel(x0, y0, color);
+            if (x0 == x1 && y0 == y1) {
+                break;
             }
-            D = D + 2 * dy;
+
+            int e2 = 2 * err;
+            if (e2 >= dy) { /* e_xy+e_x > 0 */
+                err += dy;
+                x0 += sx;
+            }
+            if (e2 <= dx) { /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
+            }
         }
     }
 
