@@ -1,14 +1,14 @@
 package cc.eumc.eusmapdisplay.model;
 
+import cc.eumc.eusmapdisplay.event.DisplayEventHandler;
+import cc.eumc.eusmapdisplay.event.DisplayEventType;
 import cc.eumc.eusmapdisplay.renderer.DisplayRenderer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.map.MapView;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MapDisplay {
     private final UUID uniqueId;
@@ -17,6 +17,8 @@ public class MapDisplay {
     private Display display;
     private transient Map<Integer, MapView> idViewMap;
     private transient World world;
+
+    private transient List<DisplayEventHandler> displayEventHandlerList = new ArrayList<>();
 
 //    public MapDisplay(Display display, MapView[][] existingMapViews) {
 //        this.display = display;
@@ -49,6 +51,32 @@ public class MapDisplay {
                 viewIds[x][y] = -1;
             }
         }
+    }
+
+    public void triggerEvent(DisplayEventType type, Player player, Integer value1, Integer value2) {
+        if (displayEventHandlerList == null) {
+            displayEventHandlerList = new ArrayList<>();
+        }
+        for (DisplayEventHandler handler : displayEventHandlerList.toArray(new DisplayEventHandler[0])) {
+            switch (type) {
+                case CURSOR_MOVE -> handler.onCursorPositionChanged(this, player, value1, value2);
+                case LEFT_CLICK -> handler.onLeftClick(this, player, value1, value2);
+                case RIGHT_CLICK -> handler.onRightClick(this, player, value1, value2);
+                case WHEEL_SCROLL -> handler.onWheelScroll(this, player, value1);
+            }
+        }
+    }
+
+    public void registerEventHandler(DisplayEventHandler handler) {
+        displayEventHandlerList.add(handler);
+    }
+
+    public boolean removeEventHandler(DisplayEventHandler handler) {
+        return displayEventHandlerList.remove(handler);
+    }
+
+    public DisplayEventHandler[] getEventHandlers() {
+        return displayEventHandlerList.toArray(new DisplayEventHandler[0]);
     }
 
 //    private void setRenderer(int windowXNumber, int windowYNumber, World world) {
