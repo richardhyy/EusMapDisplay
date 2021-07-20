@@ -54,6 +54,8 @@ public class MapDisplay {
     }
 
     public void triggerEvent(DisplayEventType type, Player player, Integer value1, Integer value2) {
+//        System.out.printf("[%s] %d %d%n", type.toString(), value1, value1);
+
         if (displayEventHandlerList == null) {
             displayEventHandlerList = new ArrayList<>();
         }

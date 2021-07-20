@@ -12,9 +12,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -34,6 +38,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         Entity entity = e.getPlayer().getTargetEntity(10, false);
 
         AtomicReference<Integer> windowX = new AtomicReference<>();
@@ -54,9 +62,8 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        if (!(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK ||
-              e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+    public void onPlayerLeftClick(PlayerInteractEvent e) {
+        if (!(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)) {
             return;
         }
 
@@ -74,16 +81,84 @@ public class PlayerListener implements Listener {
 
         MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
 
-        switch (e.getAction()) {
-            case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK ->
-                    mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
-            default ->
-                    mapDisplay.triggerEvent(DisplayEventType.RIGHT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
+        mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerBreak(BlockBreakEvent e) {
+        Entity entity = e.getPlayer().getTargetEntity(10, false);
+
+        AtomicReference<Integer> windowX = new AtomicReference<>();
+        AtomicReference<Integer> windowY = new AtomicReference<>();
+
+        UUID uuid = getTargetMapDisplay(entity, windowX, windowY);
+        if (uuid == null) {
+            return;
         }
+
+        int[] absoluteCoordinates = getTargetAbsoluteCoordinates(windowX.get(), windowY.get(), entity, e.getPlayer().getLocation());
+
+        MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
+
+        mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerBreakHang(HangingBreakByEntityEvent e) {
+        if (!(e.getRemover() instanceof Player player)) {
+            return;
+        }
+
+        Entity entity = e.getEntity();
+
+        AtomicReference<Integer> windowX = new AtomicReference<>();
+        AtomicReference<Integer> windowY = new AtomicReference<>();
+
+        UUID uuid = getTargetMapDisplay(entity, windowX, windowY);
+        if (uuid == null) {
+            return;
+        }
+
+        int[] absoluteCoordinates = getTargetAbsoluteCoordinates(windowX.get(), windowY.get(), entity, player.getLocation());
+
+        MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
+
+        mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, player, absoluteCoordinates[0], absoluteCoordinates[1]);
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerRightClick(PlayerInteractEntityEvent e) {
+        Entity entity = e.getPlayer().getTargetEntity(10, false);
+
+        AtomicReference<Integer> windowX = new AtomicReference<>();
+        AtomicReference<Integer> windowY = new AtomicReference<>();
+
+        UUID uuid = getTargetMapDisplay(entity, windowX, windowY);
+        if (uuid == null) {
+            return;
+        }
+
+        int[] absoluteCoordinates = getTargetAbsoluteCoordinates(windowX.get(), windowY.get(), entity, e.getPlayer().getLocation());
+
+        MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
+
+        mapDisplay.triggerEvent(DisplayEventType.RIGHT_CLICK, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
+
+        e.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerScrollWheel(PlayerItemHeldEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         Entity entity = e.getPlayer().getTargetEntity(10, false);
 
         AtomicReference<Integer> windowX = new AtomicReference<>();
