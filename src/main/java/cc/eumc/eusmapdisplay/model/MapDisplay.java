@@ -1,5 +1,6 @@
 package cc.eumc.eusmapdisplay.model;
 
+import cc.eumc.eusmapdisplay.event.DefaultCursorMovingHandler;
 import cc.eumc.eusmapdisplay.event.DisplayEventHandler;
 import cc.eumc.eusmapdisplay.event.DisplayEventType;
 import cc.eumc.eusmapdisplay.renderer.DisplayRenderer;
@@ -18,7 +19,7 @@ public class MapDisplay {
     private transient Map<Integer, MapView> idViewMap;
     private transient World world;
 
-    private transient List<DisplayEventHandler> displayEventHandlerList = new ArrayList<>();
+    private transient List<DisplayEventHandler> displayEventHandlerList = null;
 
 //    public MapDisplay(Display display, MapView[][] existingMapViews) {
 //        this.display = display;
@@ -51,14 +52,20 @@ public class MapDisplay {
                 viewIds[x][y] = -1;
             }
         }
+
+        displayEventHandlerList = new ArrayList<>();
+        displayEventHandlerList.add(new DefaultCursorMovingHandler());
     }
 
     public void triggerEvent(DisplayEventType type, Player player, Integer value1, Integer value2) {
 //        System.out.printf("[%s] %d %d%n", type.toString(), value1, value1);
 
+        // Add cursor moving handler if displayEventHandlerList is null
         if (displayEventHandlerList == null) {
             displayEventHandlerList = new ArrayList<>();
+            displayEventHandlerList.add(new DefaultCursorMovingHandler());
         }
+
         for (DisplayEventHandler handler : displayEventHandlerList.toArray(new DisplayEventHandler[0])) {
             try {
                 switch (type) {
@@ -74,14 +81,27 @@ public class MapDisplay {
     }
 
     public void registerEventHandler(DisplayEventHandler handler) {
+        if (displayEventHandlerList == null) {
+            displayEventHandlerList = new ArrayList<>();
+        }
+
         displayEventHandlerList.add(handler);
     }
 
     public boolean removeEventHandler(DisplayEventHandler handler) {
+        if (displayEventHandlerList == null) {
+            displayEventHandlerList = new ArrayList<>();
+            return false;
+        }
+
         return displayEventHandlerList.remove(handler);
     }
 
     public DisplayEventHandler[] getEventHandlers() {
+        if (displayEventHandlerList == null) {
+            displayEventHandlerList = new ArrayList<>();
+        }
+
         return displayEventHandlerList.toArray(new DisplayEventHandler[0]);
     }
 

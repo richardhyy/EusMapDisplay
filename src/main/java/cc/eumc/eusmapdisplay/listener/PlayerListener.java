@@ -56,8 +56,6 @@ public class PlayerListener implements Listener {
 
         MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(uuid);
 
-        mapDisplay.getDisplay().setCursorLocation(absoluteCoordinates[0], absoluteCoordinates[1]);
-
         mapDisplay.triggerEvent(DisplayEventType.CURSOR_MOVE, e.getPlayer(), absoluteCoordinates[0], absoluteCoordinates[1]);
     }
 
