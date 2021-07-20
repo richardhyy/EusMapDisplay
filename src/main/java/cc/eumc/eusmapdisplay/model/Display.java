@@ -2,8 +2,6 @@ package cc.eumc.eusmapdisplay.model;
 
 import org.bukkit.map.MapPalette;
 
-import java.util.Arrays;
-
 public class Display {
     private final int width;
     private final int height;
@@ -90,7 +88,18 @@ public class Display {
         this.pixels[x][y] = value;
     }
 
-    public static int getAbsoluteCoordinate(int windowIndex, int relativeCoordinate) {
-        return windowIndex * 128 + relativeCoordinate;
+    /**
+     * Get global coordinates in display from coordinates in sub-window.
+     * @param windowX
+     * @param windowY
+     * @param inWindowX Range: 0-127
+     * @param inWindowY Range: 0-127
+     * @return
+     */
+    public static int[] getAbsoluteCoordinate(int windowX, int windowY, int inWindowX, int inWindowY) {
+        return new int[] {
+                windowX * 128 + inWindowX,
+                windowY * 128 + inWindowY
+        };
     }
 }

@@ -3,17 +3,18 @@ package cc.eumc.eusmapdisplay.manager;
 import cc.eumc.eusmapdisplay.EusMapDisplay;
 import cc.eumc.eusmapdisplay.model.Display;
 import cc.eumc.eusmapdisplay.model.MapDisplay;
-import cc.eumc.eusmapdisplay.renderer.DisplayRenderer;
 import cc.eumc.eusmapdisplay.storage.DisplayStorage;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GlobalMapManager {
@@ -43,6 +44,7 @@ public class GlobalMapManager {
                 List<Component> loreList = new ArrayList<>();
                 loreList.add(Component.text("Map Display"));
                 loreList.add(Component.text(String.format("(%d, %d)", x, y)));
+                loreList.add(Component.text(mapDisplay.getUniqueId().toString()).style(Style.style(TextColor.color(60, 60, 110))));
                 meta.lore(loreList);
                 itemStack.setItemMeta(meta);
                 itemStacks.add(itemStack);
