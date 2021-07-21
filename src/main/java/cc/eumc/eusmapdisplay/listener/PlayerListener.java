@@ -43,7 +43,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if (e.isCancelled()) {
+        if (e.isCancelled() || e.getPlayer().isSneaking()) {
             return;
         }
 
@@ -62,7 +62,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerLeftClick(PlayerInteractEvent e) {
-        if (!(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)) {
+        if (!(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) || e.getPlayer().isSneaking()) {
             return;
         }
 
@@ -81,6 +81,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerBreak(BlockBreakEvent e) {
+        if (e.getPlayer().isSneaking()) {
+            return;
+        }
+
         TargetDisplay[] targetDisplays = getTargetMapDisplay(e.getPlayer(), e.getPlayer().getLocation());
         if (targetDisplays == null) {
             return;
@@ -100,6 +104,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (player.isSneaking()) {
+            return;
+        }
+
         TargetDisplay[] targetDisplays = getTargetMapDisplay(player, player.getLocation());
         if (targetDisplays == null) {
             return;
@@ -115,6 +123,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEntityEvent e) {
+        if (e.getPlayer().isSneaking()) {
+            return;
+        }
+
         TargetDisplay[] targetDisplays = getTargetMapDisplay(e.getPlayer(), e.getPlayer().getLocation());
         if (targetDisplays == null) {
             return;
@@ -129,7 +141,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerScrollWheel(PlayerItemHeldEvent e) {
-        if (e.isCancelled()) {
+        if (e.isCancelled() || e.getPlayer().isSneaking()) {
             return;
         }
 
@@ -144,6 +156,7 @@ public class PlayerListener implements Listener {
             mapDisplay.triggerEvent(DisplayEventType.WHEEL_SCROLL, e.getPlayer(), Math.abs(delta) >= 8 ? (Math.abs(delta) - 7) * (delta > 0 ? 1 : -1) : delta, null);
         }
     }
+
 
     /**
      * Get MapDisplays attached to the target block
