@@ -1,15 +1,17 @@
 package cc.eumc.eusmapdisplay.storage;
 
-import cc.eumc.eusmapdisplay.model.Display;
 import cc.eumc.eusmapdisplay.model.MapDisplay;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class DisplayStorage {
@@ -59,6 +61,10 @@ public class DisplayStorage {
 
     public MapDisplay getMapDisplay(UUID uuid) {
         return displays.get(uuid);
+    }
+
+    public MapDisplay[] getMapDisplays() {
+        return displays.values().toArray(new MapDisplay[0]);
     }
 
     public void addMapDisplay(MapDisplay mapDisplay) {

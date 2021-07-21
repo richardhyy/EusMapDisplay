@@ -53,6 +53,10 @@ public class GlobalMapManager {
         return itemStacks.toArray(new ItemStack[0]);
     }
 
+    public MapDisplay[] getMapDisplays() {
+        return displayStorage.getMapDisplays();
+    }
+
     public MapDisplay getMapDisplay(UUID uuid) {
         return displayStorage.getMapDisplay(uuid);
     }
