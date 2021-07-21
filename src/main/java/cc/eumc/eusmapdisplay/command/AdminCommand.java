@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapPalette;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public class AdminCommand implements CommandExecutor, TabExecutor {
 
                     @Override
                     public void onLeftClick(MapDisplay mapDisplay, Player player, int x, int y) {
-
+                        mapDisplay.getDisplay().drawText(x, y, String.format("(%d, %d)", x, y), new Font("Minecraft", Font.BOLD, 14), Color.CYAN);
                     }
 
                     @Override

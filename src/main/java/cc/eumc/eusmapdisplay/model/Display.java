@@ -2,6 +2,9 @@ package cc.eumc.eusmapdisplay.model;
 
 import org.bukkit.map.MapPalette;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class Display {
     private final int width;
     private final int height;
@@ -136,6 +139,37 @@ public class Display {
             for (int x = x0 + 1; x < x1 - 1; x++) {
                 for (int y = y0 + 1; y < y1 - 1; y++) {
                     setPixel(x, y, fillColor);
+                }
+            }
+        }
+    }
+
+    public void drawText(int x, int y, String text, Font font, Color color) {
+        Color transparentColor = new Color(color.getRed() == 255 ? 254 : 255, color.getGreen() == 255 ? 254 : 255, color.getBlue() == 255 ? 254 : 255);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2D = image.createGraphics();
+        graphics2D.setFont(font);
+        FontMetrics fontMetrics = graphics2D.getFontMetrics();
+        graphics2D.setColor(transparentColor);
+        graphics2D.fillRect(0, 0, image.getWidth(), image.getHeight());
+        graphics2D.setColor(color);
+        graphics2D.drawString(text, 0, fontMetrics.getAscent());
+        graphics2D.dispose();
+        plotImage(x, y, image, transparentColor);
+    }
+
+    public void plotImage(int x, int y, BufferedImage image, Color transparentColor) {
+        for (int _x = 0; _x < image.getWidth(); _x++) {
+            for (int _y = 0; _y < image.getHeight(); _y++) {
+                int absoluteX = _x + x;
+                int absoluteY = _y + y;
+                if (absoluteX < 0 || absoluteX > width - 1 || absoluteY < 0 || absoluteY> height - 1) {
+                    continue;
+                }
+
+                Color pixelColor = new Color(image.getRGB(_x, _y));
+                if (!pixelColor.equals(transparentColor)) {
+                    pixels[absoluteX][absoluteY] = MapPalette.matchColor(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue());
                 }
             }
         }
