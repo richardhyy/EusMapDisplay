@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -74,6 +75,29 @@ public class PlayerListener implements Listener {
         for (TargetDisplay targetDisplay : targetDisplays) {
             MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(targetDisplay.uuid);
             mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, e.getPlayer(), targetDisplay.absoluteX, targetDisplay.absoluteY);
+        }
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerAttemptPickUpMapDisplay(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player player)) {
+            return;
+        }
+
+        if (player.isSneaking()) {
+            return;
+        }
+
+        TargetDisplay[] targetDisplays = getTargetMapDisplay(player, player.getLocation());
+        if (targetDisplays == null) {
+            return;
+        }
+
+        for (TargetDisplay targetDisplay : targetDisplays) {
+            MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(targetDisplay.uuid);
+            mapDisplay.triggerEvent(DisplayEventType.LEFT_CLICK, player, targetDisplay.absoluteX, targetDisplay.absoluteY);
         }
 
         e.setCancelled(true);
