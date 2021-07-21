@@ -4,6 +4,7 @@ import cc.eumc.eusmapdisplay.event.DefaultCursorMovingHandler;
 import cc.eumc.eusmapdisplay.event.DisplayEventHandler;
 import cc.eumc.eusmapdisplay.event.DisplayEventType;
 import cc.eumc.eusmapdisplay.renderer.DisplayRenderer;
+import cc.eumc.eusmapdisplay.util.TimestampUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import java.util.*;
 public class MapDisplay {
     private final UUID uniqueId;
 
+    private long lastAccess;
     private int[][] viewIds;
     private Display display;
     private transient Map<Integer, MapView> idViewMap;
@@ -150,12 +152,15 @@ public class MapDisplay {
     public void initMaps() {
         for (int x = 0; x < viewIds.length; x++) {
             for (int y = 0; y < viewIds[0].length; y++) {
-                setMapView(x, y, null);
+                assignMapView(x, y, null);
             }
         }
     }
 
-    public void setMapView(int windowX, int windowY, MapView mapView) {
+    public void assignMapView(int windowX, int windowY, MapView mapView) {
+        // A MapInitializeEvent will trigger updating `lastAccess`
+        this.lastAccess = TimestampUtil.getSecondsSince1970();
+        
         initMap(windowX, windowY, mapView);
     }
 
@@ -183,5 +188,9 @@ public class MapDisplay {
 
     public UUID getUniqueId() {
         return uniqueId;
+    }
+
+    public long getLastAccess() {
+        return lastAccess;
     }
 }
