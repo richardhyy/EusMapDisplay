@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -195,7 +194,7 @@ public class PlayerListener implements Listener {
         }
 
         // For debugging
-        targetBlock.setType(IndicatorTypes[new Random().nextInt(IndicatorTypes.length)]);
+//        targetBlock.setType(IndicatorTypes[new Random().nextInt(IndicatorTypes.length)]);
 
         List<TargetDisplay> mapDisplays = new ArrayList<>();
         List<ItemFrame> itemFrames = targetBlock.getLocation().getNearbyEntitiesByType(ItemFrame.class, 2, 1, 2).stream()
