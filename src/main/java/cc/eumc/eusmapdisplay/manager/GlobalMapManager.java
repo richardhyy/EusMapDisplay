@@ -26,6 +26,13 @@ public class GlobalMapManager {
         this.displayStorage = displayStorage;
     }
 
+    /**
+     * Create a new MapDisplay
+     * @param windowWidth number of MapView for the MapDisplay's width
+     * @param windowHeight number of MapView for the MapDisplay's height
+     * @param world the world the MapView belongs to
+     * @return MapDisplay
+     */
     public MapDisplay createMap(int windowWidth, int windowHeight, World world) {
         Display display = new Display(windowWidth * 128, windowHeight * 128);
         MapDisplay mapDisplay = new MapDisplay(UUID.randomUUID(), display, world);
@@ -34,6 +41,12 @@ public class GlobalMapManager {
         return mapDisplay;
     }
 
+    /**
+     * Get an array of FILLED_MAP ItemStack bound with the MapDisplay
+     * Content of lores on the second and third line are used for identifying and SHOULD NOT BE MODIFIED
+     * @param mapDisplay existing MapDisplay
+     * @return
+     */
     public ItemStack[] getMapItem(MapDisplay mapDisplay) {
         List<ItemStack> itemStacks = new ArrayList<>();
         for (int y = 0; y < mapDisplay.getMapViews()[0].length; y++) {
@@ -53,10 +66,19 @@ public class GlobalMapManager {
         return itemStacks.toArray(new ItemStack[0]);
     }
 
+    /**
+     * Get all MapDisplays
+     * @return
+     */
     public MapDisplay[] getMapDisplays() {
         return displayStorage.getMapDisplays();
     }
 
+    /**
+     * Get MapDisplay by UUID
+     * @param uuid
+     * @return
+     */
     public MapDisplay getMapDisplay(UUID uuid) {
         return displayStorage.getMapDisplay(uuid);
     }
@@ -85,6 +107,9 @@ public class GlobalMapManager {
         });
     }
 
+    /**
+     * Save all MapDisplay to disk
+     */
     public void save() {
         displayStorage.save();
     }
