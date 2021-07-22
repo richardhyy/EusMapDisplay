@@ -27,31 +27,66 @@ public class Display {
         this.cursor = new DisplayCursor(MapPalette.DARK_GRAY, MapPalette.WHITE);
     }
 
+    /**
+     * Get width (unit: pixel)
+     * @return
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Get height (unit: pixel)
+     * @return
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Get x coordinate for the cursor
+     * @return
+     */
     public int getCursorX() {
         return cursorX;
     }
 
+    /**
+     * Get y coordinate for the cursor
+     * @return
+     */
     public int getCursorY() {
         return cursorY;
     }
 
+    /**
+     * Set cursor coordinates
+     * @param x
+     * @param y
+     */
     public void setCursorLocation(int x, int y) {
         this.cursorX = x;
         this.cursorY = y;
     }
 
+    /**
+     * Get all pixels of the Display
+     * @param withCursor
+     * @return
+     */
     public byte[][] getPixels(boolean withCursor) {
         return getPixels(withCursor, 0, 0, width - 1, height - 1);
     }
 
+    /**
+     * Get part of the pixels of the Display
+     * @param withCursor draw cursor
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
+     * @return
+     */
     public byte[][] getPixels(boolean withCursor, int startX, int startY, int endX, int endY) {
         byte[][] canvas = new byte[pixels.length][pixels[0].length];
         for (int x = startX; x <= endX; x++) {
@@ -87,10 +122,24 @@ public class Display {
         return result;
     }
 
+    /**
+     * Draw pixel on the display
+     * @param x
+     * @param y
+     * @param value MapView color
+     */
     public void setPixel(int x, int y, byte value) {
         this.pixels[x][y] = value;
     }
 
+    /**
+     * Draw line segment on the display
+     * @param x0
+     * @param y0
+     * @param x1
+     * @param y1
+     * @param color MapView color
+     */
     public void plotLine(int x0, int y0, int x1, int y1, byte color) {
         int dx = Math.abs(x1-x0);
         int sx = x0<x1 ? 1 : -1;
@@ -115,6 +164,16 @@ public class Display {
         }
     }
 
+    /**
+     * Draw rectangle on the Display
+     * Outline is 1px in width
+     * @param x0
+     * @param y0
+     * @param x1
+     * @param y1
+     * @param fillColor MapView color
+     * @param outlineColor MapView color
+     */
     public void plotRectangle(int x0, int y0, int x1, int y1, byte fillColor, byte outlineColor) {
         int t;
         if (x1 < x0) {
@@ -144,6 +203,14 @@ public class Display {
         }
     }
 
+    /**
+     * Draw text on the Display
+     * @param x
+     * @param y
+     * @param text
+     * @param font awt font
+     * @param color awt color
+     */
     public void drawText(int x, int y, String text, Font font, Color color) {
         Color transparentColor = new Color(color.getRed() == 255 ? 254 : 255, color.getGreen() == 255 ? 254 : 255, color.getBlue() == 255 ? 254 : 255);
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -158,6 +225,13 @@ public class Display {
         plotImage(x, y, image, transparentColor);
     }
 
+    /**
+     * Draw image on the Display
+     * @param x
+     * @param y
+     * @param image
+     * @param transparentColor awt color
+     */
     public void plotImage(int x, int y, BufferedImage image, Color transparentColor) {
         for (int _x = 0; _x < image.getWidth(); _x++) {
             for (int _y = 0; _y < image.getHeight(); _y++) {
