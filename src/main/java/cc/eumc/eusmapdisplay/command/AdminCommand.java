@@ -28,9 +28,7 @@ public class AdminCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission("mapdisplay.admin")) {
-            if (args[0].equalsIgnoreCase("test")) {
-                Player player = (Player) sender;
-
+            if (args[0].equalsIgnoreCase("test") && sender instanceof Player player) {
                 MapDisplay mapDisplay = plugin.getMapManager().createMap(2, 2, player.getWorld());
                 for(ItemStack item : plugin.getMapManager().getMapItem(mapDisplay)) {
                     player.getInventory().addItem(item);
@@ -46,7 +44,7 @@ public class AdminCommand implements CommandExecutor, TabExecutor {
 
                     @Override
                     public void onLeftClick(MapDisplay mapDisplay, Player player, int x, int y) {
-                        mapDisplay.getDisplay().drawText(x, y, String.format("(%d, %d)", x, y), new Font("Minecraft", Font.BOLD, 14), Color.CYAN);
+                        mapDisplay.getDisplay().drawText(x, y, String.format("(%d, %d)", x, y), new Font("Arial", Font.BOLD, 14), Color.CYAN);
                     }
 
                     @Override
@@ -64,14 +62,19 @@ public class AdminCommand implements CommandExecutor, TabExecutor {
 
                     }
                 });
+            } else {
+                sendMessage(sender, "&ePlayer only command.");
             }
         }
         else {
-            sender.sendMessage("[UniBan] §eSorry.");
+            sendMessage(sender, "&eSorry.");
         }
         return true;
     }
 
+    private void sendMessage(CommandSender receiver, String message) {
+        receiver.sendMessage("[EusMapDisplay] " + message.replaceAll("&", "§"));
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
