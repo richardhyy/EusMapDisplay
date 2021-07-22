@@ -20,8 +20,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/richardhyy/EusMapDisplay</url>
+            <name>GitHub richardhyy Maven Packages</name>
+            <url>https://maven.pkg.github.com/richardhyy/eusmapdisplay</url>
         </repository>
     </distributionManagement>
 
