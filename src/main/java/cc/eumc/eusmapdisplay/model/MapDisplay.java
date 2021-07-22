@@ -1,5 +1,6 @@
 package cc.eumc.eusmapdisplay.model;
 
+import cc.eumc.eusmapdisplay.EusMapDisplay;
 import cc.eumc.eusmapdisplay.event.DefaultCursorMovingHandler;
 import cc.eumc.eusmapdisplay.event.DisplayEventHandler;
 import cc.eumc.eusmapdisplay.event.DisplayEventType;
@@ -20,6 +21,7 @@ public class MapDisplay {
     private Display display;
     private transient Map<Integer, MapView> idViewMap;
     private transient World world;
+    private transient boolean active = false;
 
     private transient List<DisplayEventHandler> displayEventHandlerList = null;
 
@@ -122,11 +124,11 @@ public class MapDisplay {
 //    }
 
     /**
-     * Create new map for displaying
+     * Create new map or bind with existing map for displaying
      * @param mapView leave null for creating new map
      * @param windowX
      * @param windowY
-     * @return mapId
+     * @return MapView bound with the display
      */
     private MapView initMap(int windowX, int windowY, MapView mapView) {
         MapView map = mapView == null ? Bukkit.createMap(world) : mapView;
@@ -141,7 +143,10 @@ public class MapDisplay {
         }
         this.idViewMap.put(map.getId(), map);
 
-        System.out.printf("MapView %d <~> %s%n", map.getId(), uniqueId);
+        // set active if any part of the display is bound with a MapView
+        active = true;
+
+        EusMapDisplay.getInstance().sendInfo(String.format("MapView %d <~> %s", map.getId(), uniqueId));
 
         return map;
     }
@@ -192,5 +197,9 @@ public class MapDisplay {
 
     public long getLastAccess() {
         return lastAccess;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }
