@@ -226,6 +226,22 @@ public class MapDisplay {
     }
 
     /**
+     * Pixel width divided by 128
+     * @return
+     */
+    public int getWindowWidth() {
+        return getDisplay().getWidth() / 128;
+    }
+
+    /**
+     * Pixel height divided by 128
+     * @return
+     */
+    public int getWindowHeight() {
+        return getDisplay().getHeight() / 128;
+    }
+
+    /**
      * Get the unique id of the MapDisplay
      * @return
      */
