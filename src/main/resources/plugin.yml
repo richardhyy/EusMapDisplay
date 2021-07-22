@@ -1,5 +1,5 @@
 name: EusMapDisplay
-version: ${project.version}
+version: 1.0
 main: cc.eumc.eusmapdisplay.EusMapDisplay
 api-version: 1.17
 authors: [ EucalyptusLeaves ]
