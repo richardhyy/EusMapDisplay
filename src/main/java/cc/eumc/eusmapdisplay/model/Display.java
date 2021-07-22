@@ -140,7 +140,7 @@ public class Display {
      * @param y1
      * @param color MapView color
      */
-    public void plotLine(int x0, int y0, int x1, int y1, byte color) {
+    public void drawLine(int x0, int y0, int x1, int y1, byte color) {
         int dx = Math.abs(x1-x0);
         int sx = x0<x1 ? 1 : -1;
         int dy = -Math.abs(y1-y0);
@@ -174,7 +174,7 @@ public class Display {
      * @param fillColor MapView color
      * @param outlineColor MapView color
      */
-    public void plotRectangle(int x0, int y0, int x1, int y1, byte fillColor, byte outlineColor) {
+    public void drawRectangle(int x0, int y0, int x1, int y1, byte fillColor, byte outlineColor) {
         int t;
         if (x1 < x0) {
             t = x1;
@@ -188,10 +188,10 @@ public class Display {
         }
 
         if (outlineColor != 0) {
-            plotLine(x0, y0, x1, y0, outlineColor);
-            plotLine(x0, y1, x1, y1, outlineColor);
-            plotLine(x0, y0, x0, y1, outlineColor);
-            plotLine(x1, y0, x1, y1, outlineColor);
+            drawLine(x0, y0, x1, y0, outlineColor);
+            drawLine(x0, y1, x1, y1, outlineColor);
+            drawLine(x0, y0, x0, y1, outlineColor);
+            drawLine(x1, y0, x1, y1, outlineColor);
         }
 
         if (fillColor != 0) {
@@ -222,7 +222,7 @@ public class Display {
         graphics2D.setColor(color);
         graphics2D.drawString(text, 0, fontMetrics.getAscent());
         graphics2D.dispose();
-        plotImage(x, y, image, transparentColor);
+        drawImage(x, y, image, transparentColor);
     }
 
     /**
@@ -232,7 +232,7 @@ public class Display {
      * @param image
      * @param transparentColor awt color
      */
-    public void plotImage(int x, int y, BufferedImage image, Color transparentColor) {
+    public void drawImage(int x, int y, BufferedImage image, Color transparentColor) {
         for (int _x = 0; _x < image.getWidth(); _x++) {
             for (int _y = 0; _y < image.getHeight(); _y++) {
                 int absoluteX = _x + x;

@@ -50,8 +50,8 @@ public class AdminCommand implements CommandExecutor, TabExecutor {
                     @Override
                     public void onRightClick(MapDisplay mapDisplay, Player player, int x, int y) {
                         if (x0 > -1 && y0 > -1) {
-                            mapDisplay.getDisplay().plotRectangle(x0, y0, x, y, MapPalette.DARK_GREEN, MapPalette.LIGHT_GREEN);
-                            mapDisplay.getDisplay().plotLine(x0, y0, x, y, MapPalette.BLUE);
+                            mapDisplay.getDisplay().drawRectangle(x0, y0, x, y, MapPalette.DARK_GREEN, MapPalette.LIGHT_GREEN);
+                            mapDisplay.getDisplay().drawLine(x0, y0, x, y, MapPalette.BLUE);
                         }
                         x0 = x;
                         y0 = y;
