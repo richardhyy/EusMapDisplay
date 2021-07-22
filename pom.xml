@@ -17,6 +17,13 @@
     </properties>
     <url>www.eumc.cc</url>
 
+    <distributionManagement>
+        <repository>
+            <id>eusmapdisplay</id>
+            <url>https://github.com/richardhyy/EusMapDisplay/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
