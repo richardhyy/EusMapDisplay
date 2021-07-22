@@ -19,8 +19,9 @@
 
     <distributionManagement>
         <repository>
-            <id>eusmapdisplay</id>
-            <url>https://github.com/richardhyy/EusMapDisplay/</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/richardhyy/EusMapDisplay</url>
         </repository>
     </distributionManagement>
 
