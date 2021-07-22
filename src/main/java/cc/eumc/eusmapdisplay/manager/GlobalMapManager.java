@@ -51,19 +51,30 @@ public class GlobalMapManager {
         List<ItemStack> itemStacks = new ArrayList<>();
         for (int y = 0; y < mapDisplay.getMapViews()[0].length; y++) {
             for (int x = 0; x < mapDisplay.getMapViews().length; x++) {
-                ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
-                MapMeta meta = ((MapMeta) itemStack.getItemMeta());
-                meta.setMapView(mapDisplay.getMapViews()[x][y]);
-                List<Component> loreList = new ArrayList<>();
-                loreList.add(Component.text("Map Display"));
-                loreList.add(Component.text(String.format("(%d, %d)", x, y)));
-                loreList.add(Component.text(mapDisplay.getUniqueId().toString()).style(Style.style(TextColor.color(60, 60, 110))));
-                meta.lore(loreList);
-                itemStack.setItemMeta(meta);
-                itemStacks.add(itemStack);
+                itemStacks.add(getMapItem(mapDisplay, x, y));
             }
         }
         return itemStacks.toArray(new ItemStack[0]);
+    }
+
+    /**
+     * Get FILLED_MAP ItemStack bound with the MapDisplay with specific windowX and windowY
+     * @param mapDisplay
+     * @param windowX
+     * @param windowY
+     * @return
+     */
+    public ItemStack getMapItem(MapDisplay mapDisplay, int windowX, int windowY) {
+        ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
+        MapMeta meta = ((MapMeta) itemStack.getItemMeta());
+        meta.setMapView(mapDisplay.getMapViews()[windowX][windowY]);
+        List<Component> loreList = new ArrayList<>();
+        loreList.add(Component.text("Map Display"));
+        loreList.add(Component.text(String.format("(%d, %d)", windowX, windowY)));
+        loreList.add(Component.text(mapDisplay.getUniqueId().toString()).style(Style.style(TextColor.color(60, 60, 110))));
+        meta.lore(loreList);
+        itemStack.setItemMeta(meta);
+        return itemStack;
     }
 
     /**
