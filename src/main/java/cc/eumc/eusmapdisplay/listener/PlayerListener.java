@@ -28,9 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlayerListener implements Listener {
@@ -162,6 +160,8 @@ public class PlayerListener implements Listener {
         e.setCancelled(true);
     }
 
+    Map<UUID, Integer> playerDeltaMap = new HashMap<>();
+
     @EventHandler
     public void onPlayerScrollWheel(PlayerItemHeldEvent e) {
         if (e.isCancelled() || e.getPlayer().isSneaking()) {
@@ -176,7 +176,14 @@ public class PlayerListener implements Listener {
         for (TargetDisplay targetDisplay : targetDisplays) {
             MapDisplay mapDisplay = plugin.getMapManager().getMapDisplay(targetDisplay.uuid);
             int delta = e.getNewSlot() - e.getPreviousSlot();
-            mapDisplay.triggerEvent(DisplayEventType.WHEEL_SCROLL, e.getPlayer(), Math.abs(delta) >= 8 ? (Math.abs(delta) - 7) * (delta > 0 ? 1 : -1) : delta, null);
+            if (Math.abs(delta) > 2) {
+                Integer last = playerDeltaMap.get(e.getPlayer().getUniqueId());
+                if (last != null) {
+                    delta = (Math.abs(delta) - 7) * (last > 0 ? 1 : -1);
+                }
+            }
+            playerDeltaMap.put(e.getPlayer().getUniqueId(), delta);
+            mapDisplay.triggerEvent(DisplayEventType.WHEEL_SCROLL, e.getPlayer(), delta, null);
         }
     }
 
