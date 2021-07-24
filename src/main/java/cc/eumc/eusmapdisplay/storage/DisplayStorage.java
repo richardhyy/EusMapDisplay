@@ -60,7 +60,12 @@ public class DisplayStorage {
     }
 
     public MapDisplay getMapDisplay(UUID uuid) {
-        return displays.get(uuid);
+        for (MapDisplay display : displays.values()) {
+            if (display.getUniqueId().equals(uuid)) {
+                return display;
+            }
+        }
+        return null;
     }
 
     public MapDisplay[] getMapDisplays() {
