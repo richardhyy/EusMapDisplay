@@ -190,8 +190,8 @@ public class PlayerListener implements Listener {
 
     /**
      * Get MapDisplays attached to the target block
-     * @param player
-     * @param playerStandAt
+     * @param player the player for checking
+     * @param playerStandAt location of the player's feet
      * @return null if no MapDisplay attached to target block
      */
     @Nullable TargetDisplay[] getTargetMapDisplay(Player player, Location playerStandAt) {

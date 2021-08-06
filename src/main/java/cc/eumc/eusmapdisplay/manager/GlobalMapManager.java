@@ -45,7 +45,7 @@ public class GlobalMapManager {
      * Get an array of FILLED_MAP ItemStack bound with the MapDisplay
      * Content of lores on the second and third line are used for identifying and SHOULD NOT BE MODIFIED
      * @param mapDisplay existing MapDisplay
-     * @return
+     * @return an array of filled map
      */
     public ItemStack[] getMapItem(MapDisplay mapDisplay) {
         List<ItemStack> itemStacks = new ArrayList<>();
@@ -59,10 +59,10 @@ public class GlobalMapManager {
 
     /**
      * Get FILLED_MAP ItemStack bound with the MapDisplay with specific windowX and windowY
-     * @param mapDisplay
-     * @param windowX
-     * @param windowY
-     * @return
+     * @param mapDisplay the MapDisplay to get filled map from
+     * @param windowX x coordinate of the FILLED_MAP in the MapDisplay
+     * @param windowY y coordinate of the FILLED_MAP in the MapDisplay
+     * @return FILLED_MAP
      */
     public ItemStack getMapItem(MapDisplay mapDisplay, int windowX, int windowY) {
         ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
@@ -79,7 +79,7 @@ public class GlobalMapManager {
 
     /**
      * Get all MapDisplays
-     * @return
+     * @return get all MapDisplays
      */
     public MapDisplay[] getMapDisplays() {
         return displayStorage.getMapDisplays();
@@ -87,8 +87,8 @@ public class GlobalMapManager {
 
     /**
      * Get MapDisplay by UUID
-     * @param uuid
-     * @return
+     * @param uuid unique ID of the MapDisplay
+     * @return required MapDisplay, null if no match
      */
     public MapDisplay getMapDisplay(UUID uuid) {
         return displayStorage.getMapDisplay(uuid);
@@ -96,9 +96,10 @@ public class GlobalMapManager {
 
     /**
      * Get MapDisplay which contains MapView that matches the given id
+     * NOTICE: refWindowX/Y will not be assigned if the MapView is not a part of a MapDisplay
      * @param id MapView id
-     * @param refWindowX
-     * @param refWindowY
+     * @param refWindowX x coordinate of the MapView within the MapDisplay
+     * @param refWindowY y coordinate of the MapView within the MapDisplay
      * @return MapDisplay or null if not exist
      */
     public MapDisplay getMapDisplayFromMapViewId(int id, AtomicReference<Integer> refWindowX, AtomicReference<Integer> refWindowY) {

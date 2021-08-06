@@ -29,7 +29,7 @@ public class Display {
 
     /**
      * Get width (unit: pixel)
-     * @return
+     * @return width of the Display
      */
     public int getWidth() {
         return width;
@@ -37,7 +37,7 @@ public class Display {
 
     /**
      * Get height (unit: pixel)
-     * @return
+     * @return height of the Display
      */
     public int getHeight() {
         return height;
@@ -45,7 +45,7 @@ public class Display {
 
     /**
      * Get x coordinate for the cursor
-     * @return
+     * @return x coordinate in pixels
      */
     public int getCursorX() {
         return cursorX;
@@ -53,7 +53,7 @@ public class Display {
 
     /**
      * Get y coordinate for the cursor
-     * @return
+     * @return y coordinate in pixels
      */
     public int getCursorY() {
         return cursorY;
@@ -61,8 +61,8 @@ public class Display {
 
     /**
      * Set cursor coordinates
-     * @param x
-     * @param y
+     * @param x x coordinate in pixels
+     * @param y y coordinate in pixels
      */
     public void setCursorLocation(int x, int y) {
         this.cursorX = x;
@@ -71,8 +71,8 @@ public class Display {
 
     /**
      * Get all pixels of the Display
-     * @param withCursor
-     * @return
+     * @param withCursor true to draw cursor on returned pixels
+     * @return bytes of rendered pixels
      */
     public byte[][] getPixels(boolean withCursor) {
         return getPixels(withCursor, 0, 0, width - 1, height - 1);
@@ -81,11 +81,11 @@ public class Display {
     /**
      * Get part of the pixels of the Display
      * @param withCursor draw cursor
-     * @param startX
-     * @param startY
-     * @param endX
-     * @param endY
-     * @return
+     * @param startX start x coordinate
+     * @param startY start y coordinate
+     * @param endX end x coordinate
+     * @param endY end y coordinate
+     * @return cropped pixels
      */
     public byte[][] getPixels(boolean withCursor, int startX, int startY, int endX, int endY) {
         byte[][] canvas = new byte[pixels.length][pixels[0].length];
@@ -124,8 +124,8 @@ public class Display {
 
     /**
      * Draw pixel on the display
-     * @param x
-     * @param y
+     * @param x x coordinate in pixel
+     * @param y y coordinate in pixel
      * @param value MapView color
      */
     public void setPixel(int x, int y, byte value) {
@@ -134,10 +134,10 @@ public class Display {
 
     /**
      * Draw line segment on the display
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
+     * @param x0 x coordinate for the start point of the line segment
+     * @param y0 y coordinate for the start point of the line segment
+     * @param x1 x coordinate for the end point of the line segment
+     * @param y1 y coordinate for the end point of the line segment
      * @param color MapView color
      */
     public void drawLine(int x0, int y0, int x1, int y1, byte color) {
@@ -167,10 +167,10 @@ public class Display {
     /**
      * Draw rectangle on the Display
      * Outline is 1px in width
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
+     * @param x0 x coordinate for the first vertex of the rectangle
+     * @param y0 y coordinate for the first vertex of the rectangle
+     * @param x1 x coordinate for the second vertex of the rectangle
+     * @param y1 y coordinate for the second vertex of the rectangle
      * @param fillColor MapView color
      * @param outlineColor MapView color
      */
@@ -205,9 +205,9 @@ public class Display {
 
     /**
      * Draw text on the Display
-     * @param x
-     * @param y
-     * @param text
+     * @param x x coordinate of the left-top point of the text
+     * @param y y coordinate of the left-top point of the text
+     * @param text text to draw
      * @param font awt font
      * @param color awt color
      */
@@ -227,9 +227,9 @@ public class Display {
 
     /**
      * Draw image on the Display
-     * @param x
-     * @param y
-     * @param image
+     * @param x x coordinate of the left-top point of the image
+     * @param y y coordinate of the left-top point of the image
+     * @param image image to draw
      * @param transparentColor awt color
      */
     public void drawImage(int x, int y, BufferedImage image, Color transparentColor) {
@@ -250,12 +250,12 @@ public class Display {
     }
 
     /**
-     * Get global coordinates in display from coordinates in sub-window.
-     * @param windowX
-     * @param windowY
+     * Get absolute coordinates in display from coordinates in sub-window.
+     * @param windowX x coordinate of the MapView in the entire Display
+     * @param windowY y coordinate of the MapView in the entire Display
      * @param inWindowX Range: 0-127
      * @param inWindowY Range: 0-127
-     * @return
+     * @return an array of the absolute coordinates within a Display
      */
     public static int[] getAbsoluteCoordinate(int windowX, int windowY, int inWindowX, int inWindowY) {
         return new int[] {

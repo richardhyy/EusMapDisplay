@@ -22,8 +22,8 @@ public class DirectionUtil {
 
     /**
      * For example: NORTH_NORTH_WEST -> NORTH
-     * @param blockFace
-     * @return
+     * @param blockFace source block facing
+     * @return SOUTH, NORTH, EAST, or WEST
      */
     public static BlockFace standardize(BlockFace blockFace) {
         String facing = blockFace.toString();
