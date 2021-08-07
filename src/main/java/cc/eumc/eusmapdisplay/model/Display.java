@@ -4,6 +4,7 @@ import org.bukkit.map.MapPalette;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class Display {
     private final int width;
@@ -130,6 +131,16 @@ public class Display {
      */
     public void setPixel(int x, int y, byte value) {
         this.pixels[x][y] = value;
+    }
+
+    /**
+     * Fill Display with specified value
+     * @param value MapView color
+     */
+    public void fill(byte value) {
+        for (byte[] pixelColumn : this.pixels) {
+            Arrays.fill(pixelColumn, value);
+        }
     }
 
     /**
