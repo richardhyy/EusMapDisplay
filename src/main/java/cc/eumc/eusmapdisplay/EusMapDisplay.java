@@ -59,7 +59,7 @@ public final class EusMapDisplay extends JavaPlugin {
     }
 
     public String prefixForEachLine(String text) {
-        String prefix = "[MapDisplay]";
+        String prefix = "[MapDisplay] ";
         String[] lines = text.split("\n");
         for (int i=0; i<lines.length; i++) {
             lines[i] = prefix + lines[i];
