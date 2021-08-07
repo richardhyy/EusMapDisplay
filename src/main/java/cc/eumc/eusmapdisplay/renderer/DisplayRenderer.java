@@ -41,7 +41,7 @@ public class DisplayRenderer extends MapRenderer {
 
     @Override
     public void render(@Nullable MapView map, @Nullable MapCanvas canvas, @Nullable Player player) {
-        if (map == null) {
+        if (canvas == null) {
             return;
         }
 
