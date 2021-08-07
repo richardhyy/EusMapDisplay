@@ -9,6 +9,7 @@ import cc.eumc.eusmapdisplay.util.TimestampUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import java.util.*;
@@ -222,6 +223,22 @@ public class MapDisplay {
             }
         }
         return mapViews;
+    }
+
+    /**
+     * Force all MapViews to render immediately.
+     */
+    public void forceRender() {
+        MapView[][] mapViews = getMapViews();
+        for (MapView[] mapViewColumn : mapViews) {
+            for (int y = 0; y < mapViews[0].length; y++) {
+                for (MapRenderer renderer : mapViewColumn[y].getRenderers()) {
+                    if (renderer instanceof DisplayRenderer displayRenderer) {
+                        displayRenderer.render();
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DisplayRenderer extends MapRenderer {
     private final Display display;
@@ -13,6 +14,10 @@ public class DisplayRenderer extends MapRenderer {
     private final int startY;
     private final int endX;
     private final int endY;
+
+    private MapView map;
+    private MapCanvas canvas;
+    private Player player;
 
     public DisplayRenderer(Display display, int windowX, int windowY) {
         super(true);
@@ -35,14 +40,36 @@ public class DisplayRenderer extends MapRenderer {
     }
 
     @Override
-    public void render(@NotNull MapView map, @NotNull MapCanvas canvas, @NotNull Player player) {
+    public void render(@Nullable MapView map, @Nullable MapCanvas canvas, @Nullable Player player) {
+        if (map == null) {
+            return;
+        }
+
+        if (this.map != map) {
+            this.map = map;
+        }
+        if (this.canvas != canvas) {
+            this.canvas = canvas;
+        }
+        if (this.player != player) {
+            this.player = player;
+        }
+
+
         byte[][] pixels = display.getPixels(true, startX, startY, endX, endY);
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
+        for (int y = startY; y <= endY; y++) {
+            for (int x = startX; x <= endX; x++) {
                 int _x = x - startX;
                 int _y = y - startY;
                 canvas.setPixel(_x, _y, pixels[_x][_y]);
             }
         }
+    }
+
+    /**
+     * Force render
+     */
+    public void render() {
+        render(map, canvas, player);
     }
 }
