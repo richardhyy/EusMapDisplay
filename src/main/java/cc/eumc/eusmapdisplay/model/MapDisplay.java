@@ -232,6 +232,10 @@ public class MapDisplay {
         MapView[][] mapViews = getMapViews();
         for (MapView[] mapViewColumn : mapViews) {
             for (int y = 0; y < mapViews[0].length; y++) {
+                // mapViewColumn[y] = null if forceRender() is called before MapView being initialized
+                if (mapViewColumn[y] == null) {
+                    return;
+                }
                 for (MapRenderer renderer : mapViewColumn[y].getRenderers()) {
                     if (renderer instanceof DisplayRenderer displayRenderer) {
                         displayRenderer.render();
